@@ -423,7 +423,7 @@ export default function App() {
     <div style={styles.container}>
       {/* Icona/Link GitHub fisso in alto a destra */}
       <a 
-        href="https://github.com" 
+        href="https://github.com/massimilianopetra/retro-arcade" 
         target="_blank" 
         rel="noopener noreferrer"
         style={styles.githubLink}
