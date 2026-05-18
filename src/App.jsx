@@ -160,11 +160,22 @@ function TetrisGame({ onBack }) {
     dropInterval: 1000,
     lastTime: 0,
     gameOver: false,
-    blockSize: 24
+    blockSize: 24,
+    score: 0
   });
 
   const COLORS = [null, '#00f0f0', '#f0a000', '#0000f0', '#f0f000', '#00f000', '#a000f0', '#f00000'];
-  const SHAPES = [[], [,,,], [,,], [,,], [,], [,,], [,,], [,,]];
+  
+  const SHAPES = [
+    [],
+    [[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]], // I
+    [[2,0,0],[2,2,2],[0,0,0]],                 // L
+    [[0,0,3],[3,3,3],[0,0,0]],                 // J
+    [[4,4],[4,4]],                             // O
+    [[0,5,5],[5,5,0],[0,0,0]],                 // S
+    [[0,6,0],[6,6,6],[0,0,0]],                 // T
+    [[7,7,0],[0,7,7],[0,0,0]]                  // Z
+  ];
 
   const collide = (arena, player) => {
     const [m, o] = [player.matrix, player.pos];
@@ -190,15 +201,15 @@ function TetrisGame({ onBack }) {
     state.player.matrix = state.player.nextMatrix;
     state.player.nextMatrix = SHAPES[Math.floor(Math.random() * 7) + 1];
     state.player.pos.y = 0;
-    state.player.pos.x = Math.floor(state.arena.length / 2) - Math.floor(state.player.matrix.length / 2);
+    state.player.pos.x = Math.floor(state.arena[0].length / 2) - Math.floor(state.player.matrix[0].length / 2);
 
     drawNext();
 
     if (collide(state.arena, state.player)) {
-      state.arena.forEach(row => row.fill(0));
-      state.gameOver = true;
       setIsRunning(false);
-      alert(`Game Over! Punteggio Finale: ${score}`);
+      alert(`Game Over! Punteggio Finale: ${state.score}`);
+      state.arena.forEach(row => row.fill(0));
+      state.score = 0;
       setScore(0);
       setLevel(1);
       state.dropInterval = 1000;
@@ -215,13 +226,11 @@ function TetrisGame({ onBack }) {
       state.arena.splice(y, 1);
       state.arena.unshift(Array(10).fill(0));
       ++y;
-      setScore(prev => {
-        const newScore = prev + rowCount * 10;
-        const newLevel = Math.floor(newScore / 100) + 1;
-        setLevel(newLevel);
-        state.dropInterval = Math.max(100, 1000 - (newLevel - 1) * 100);
-        return newScore;
-      });
+      state.score += rowCount * 10;
+      setScore(state.score);
+      const newLevel = Math.floor(state.score / 100) + 1;
+      setLevel(newLevel);
+      state.dropInterval = Math.max(100, 1000 - (newLevel - 1) * 100);
       rowCount *= 2;
     }
   };
@@ -264,7 +273,7 @@ function TetrisGame({ onBack }) {
     while (collide(state.arena, state.player)) {
       state.player.pos.x += offset;
       offset = -(offset + (offset > 0 ? 1 : -1));
-      if (offset > state.player.matrix.length) {
+      if (offset > state.player.matrix[0].length) {
         rotateMatrix(state.player.matrix, -1);
         state.player.pos.x = pos;
         return;
@@ -322,11 +331,11 @@ function TetrisGame({ onBack }) {
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
-    const availableHeight = window.innerHeight - 190;
+    const availableHeight = window.innerHeight - 240;
     const availableWidth = container.clientWidth - 130;
     let size = Math.floor(availableHeight / 20);
     if (size * 10 > availableWidth) size = Math.floor(availableWidth / 10);
-    size = Math.max(15, size);
+    size = Math.max(16, size);
     stateRef.current.blockSize = size;
     canvas.width = size * 10;
     canvas.height = size * 20;
@@ -340,12 +349,19 @@ function TetrisGame({ onBack }) {
     window.addEventListener('resize', resizeGame);
     const handleKeyDown = (e) => {
       if (!isRunning) return;
+      
+      // Blocca lo scroll della pagina per le frecce e la barra spaziatrice
+      if (['ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp', ' '].includes(e.key)) {
+        e.preventDefault();
+      }
+
       if (e.key === 'ArrowLeft' || e.key === 'a') playerMove(-1);
       if (e.key === 'ArrowRight' || e.key === 'd') playerMove(1);
       if (e.key === 'ArrowDown' || e.key === 's') playerDrop();
       if (e.key === 'ArrowUp' || e.key === 'w') playerRotate();
-      if (e.key === ' ') { e.preventDefault(); dropInstant(); }
+      if (e.key === ' ') dropInstant();
     };
+
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('resize', resizeGame);
