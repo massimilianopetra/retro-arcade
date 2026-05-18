@@ -1,0 +1,34 @@
+# Cartelle delle dipendenze (pesanti, si rigenerano con npm install)
+node_modules/
+/jspm_packages/
+
+# Cartelle di compilazione (create da npm run build)
+dist/
+dist-ssr/
+*.local
+
+# File di log degli errori di npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# File di configurazione personale e variabili d'ambiente segrete
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# File di sistema operativi inutili
+.DS_Store
+Thumbs.db
+
+# File temporanei degli editor di codice (VS Code / WebStorm)
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
