@@ -164,17 +164,17 @@ function TetrisGame({ onBack }) {
     score: 0
   });
 
-  const COLORS = [null, '#00f0f0', '#f0a000', '#0000f0', '#f0f000', '#00f000', '#a000f0', '#f00000'];
+  const COLORS = [null, '#00f0f0', '#f0a000', '#0000f0', '#f0f000', '#00f0f0', '#a000f0', '#f00000'];
   
   const SHAPES = [
     [],
-    [[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]], // I
-    [[2,0,0],[2,2,2],[0,0,0]],                 // L
-    [[0,0,3],[3,3,3],[0,0,0]],                 // J
-    [[4,4],[4,4]],                             // O
-    [[0,5,5],[5,5,0],[0,0,0]],                 // S
-    [[0,6,0],[6,6,6],[0,0,0]],                 // T
-    [[7,7,0],[0,7,7],[0,0,0]]                  // Z
+    [[1, 1, 1, 1]], // I
+    [[2, 0, 0], [2, 2, 2]], // L
+    [[0, 0, 3], [3, 3, 3]], // J
+    [[4, 4], [4, 4]], // O
+    [[0, 5, 5], [5, 5, 0]], // S
+    [[0, 6, 0], [6, 6, 6]], // T
+    [[7, 7, 0], [0, 7, 7]]  // Z
   ];
 
   const collide = (arena, player) => {
@@ -273,7 +273,7 @@ function TetrisGame({ onBack }) {
     while (collide(state.arena, state.player)) {
       state.player.pos.x += offset;
       offset = -(offset + (offset > 0 ? 1 : -1));
-      if (offset > state.player.matrix[0].length) {
+      if (offset > state.player.matrix.length) {
         rotateMatrix(state.player.matrix, -1);
         state.player.pos.x = pos;
         return;
@@ -347,21 +347,19 @@ function TetrisGame({ onBack }) {
     playerReset();
     resizeGame();
     window.addEventListener('resize', resizeGame);
+    
     const handleKeyDown = (e) => {
       if (!isRunning) return;
-      
-      // Blocca lo scroll della pagina per le frecce e la barra spaziatrice
       if (['ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp', ' '].includes(e.key)) {
         e.preventDefault();
       }
-
       if (e.key === 'ArrowLeft' || e.key === 'a') playerMove(-1);
       if (e.key === 'ArrowRight' || e.key === 'd') playerMove(1);
       if (e.key === 'ArrowDown' || e.key === 's') playerDrop();
       if (e.key === 'ArrowUp' || e.key === 'w') playerRotate();
       if (e.key === ' ') dropInstant();
     };
-
+    
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('resize', resizeGame);
@@ -423,6 +421,19 @@ export default function App() {
 
   return (
     <div style={styles.container}>
+      {/* Icona/Link GitHub fisso in alto a destra */}
+      <a 
+        href="https://github.com" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        style={styles.githubLink}
+        title="Visualizza il codice sorgente su GitHub"
+      >
+        <svg height="28" viewBox="0 0 16 16" width="28" style={{ fill: '#94a3b8', transition: 'fill 0.2s' }} onMouseOver={(e) => e.currentTarget.style.fill = '#38bdf8'} onMouseOut={(e) => e.currentTarget.style.fill = '#94a3b8'}>
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+        </svg>
+      </a>
+
       {schermata === 'home' && (
         <div style={styles.contentWrapper}>
           <header style={styles.header}>
@@ -453,7 +464,8 @@ export default function App() {
 
 // === FILE STILI CONFIGURATI E RESPONSIVI ===
 const styles = {
-  container: { fontFamily: "'Segoe UI', Roboto, sans-serif", backgroundColor: '#0f172a', color: '#f8fafc', minHeight: '100vh', width: '100vw', padding: '20px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' },
+  container: { fontFamily: "'Segoe UI', Roboto, sans-serif", backgroundColor: '#0f172a', color: '#f8fafc', minHeight: '100vh', width: '100vw', padding: '20px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' },
+  githubLink: { position: 'absolute', top: '20px', right: '20px', textDecoration: 'none', zIndex: 1000, display: 'flex', alignItems: 'center' },
   contentWrapper: { width: '100%', maxWidth: '450px', textAlign: 'center' },
   header: { marginBottom: '25px' },
   title: { fontSize: '2.2rem', margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' },
