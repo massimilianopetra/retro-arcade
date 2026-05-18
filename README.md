@@ -2,7 +2,7 @@
 
 Un portale di giochi retro responsivo e moderno sviluppato interamente in **React nativo** (senza file HTML esterni o dipendenze pesanti). Il progetto include due grandi classici riadattati per essere giocati fluidamente sia da computer (tramite tastiera) sia da dispositivi mobili (tramite una pulsantiera touch dedicata).
 
-🚀 **Link al gioco online:** [https://github.io](https://github.io)
+🚀 **Link al gioco online:** [https://massimilianopetra.github.io/retro-arcade/](https://massimilianopetra.github.io/retro-arcade/)
 
 ---
 
