@@ -414,17 +414,43 @@ function TetrisGame({ onBack }) {
 }
 
 // ==========================================
+// 🖼️ COMPONENTE GENERICO: IFRAME GAME
+// ==========================================
+function IframeGame({ onBack, src, title, icon }) {
+  return (
+    <div style={iStyles.wrapper}>
+      <div style={tStyles.gameBar}>
+        <button style={tStyles.backBtn} onClick={onBack}>◀ Home</button>
+        <span style={{ fontWeight: 'bold' }}>{icon} {title}</span>
+        <div style={{ width: '60px' }} />
+      </div>
+      <iframe
+        src={src}
+        title={title}
+        style={iStyles.frame}
+      />
+    </div>
+  );
+}
+
+// ==========================================
 // 📱 COMPONENTE PRINCIPALE (PORTALE)
 // ==========================================
+const GAMES = [
+  { id: 'mastermind', icon: '🔴', title: 'Mastermind',    desc: 'Indovina il codice segreto di 4 colori. Valgono le ripetizioni!',           color: '#e74c3c' },
+  { id: 'tetris',     icon: '🧱', title: 'Tetris Arcade', desc: 'Incastra i mattoncini geometrici e distruggi le linee a tutto schermo.',    color: '#3498db' },
+  { id: 'lightsout',  icon: '💡', title: 'Lights Out',    desc: 'Spegni tutte le luci: ogni click cambia la cella e i 4 vicini.',             color: '#f1c40f' },
+  { id: 'yahtzee',    icon: '🎲', title: 'Yahtzee',       desc: 'Lancia 5 dadi fino a 3 volte per comporre le migliori combinazioni!',        color: '#9b59b6' },
+];
+
 export default function App() {
   const [schermata, setSchermata] = useState('home');
 
   return (
     <div style={styles.container}>
-      {/* Icona/Link GitHub fisso in alto a destra */}
-      <a 
-        href="https://github.com/massimilianopetra/retro-arcade" 
-        target="_blank" 
+      <a
+        href="https://github.com/massimilianopetra/retro-arcade"
+        target="_blank"
         rel="noopener noreferrer"
         style={styles.githubLink}
         title="Visualizza il codice sorgente su GitHub"
@@ -441,23 +467,31 @@ export default function App() {
             <p style={styles.subtitle}>Scegli un grande classico e inizia a giocare</p>
           </header>
           <div style={styles.grid}>
-            <div style={styles.card}>
-              <div style={styles.cardIcon}>🔴</div>
-              <h2 style={styles.cardTitle}>Mastermind</h2>
-              <p style={styles.cardDesc}>Indovina il codice segreto di 4 colori. Valgono le ripetizioni!</p>
-              <button style={styles.cardBtn} onClick={() => setSchermata('mastermind')}>Gioca Ora</button>
-            </div>
-            <div style={{...styles.card, marginTop: '20px'}}>
-              <div style={styles.cardIcon}>🧱</div>
-              <h2 style={styles.cardTitle}>Tetris Arcade</h2>
-              <p style={styles.cardDesc}>Incastra i mattoncini geometrici e distruggi le linee a tutto schermo.</p>
-              <button style={styles.cardBtn} onClick={() => setSchermata('tetris')}>Gioca Ora</button>
-            </div>
+            {GAMES.map((g) => (
+              <div key={g.id} style={{ ...styles.card, '--accent': g.color }}>
+                <div style={styles.cardIcon}>{g.icon}</div>
+                <h2 style={styles.cardTitle}>{g.title}</h2>
+                <p style={styles.cardDesc}>{g.desc}</p>
+                <button
+                  style={{ ...styles.cardBtn, backgroundColor: g.color }}
+                  onClick={() => setSchermata(g.id)}
+                >
+                  Gioca Ora
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       )}
+
       {schermata === 'mastermind' && <MastermindGame onBack={() => setSchermata('home')} />}
-      {schermata === 'tetris' && <TetrisGame onBack={() => setSchermata('home')} />}
+      {schermata === 'tetris'     && <TetrisGame     onBack={() => setSchermata('home')} />}
+      {schermata === 'lightsout'  && (
+        <IframeGame onBack={() => setSchermata('home')} src="/giochi/lightsout.html" title="Lights Out" icon="💡" />
+      )}
+      {schermata === 'yahtzee'    && (
+        <IframeGame onBack={() => setSchermata('home')} src="/giochi/yatzee.html"    title="Yahtzee"    icon="🎲" />
+      )}
     </div>
   );
 }
@@ -466,16 +500,21 @@ export default function App() {
 const styles = {
   container: { fontFamily: "'Segoe UI', Roboto, sans-serif", backgroundColor: '#0f172a', color: '#f8fafc', minHeight: '100vh', width: '100vw', padding: '20px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' },
   githubLink: { position: 'absolute', top: '20px', right: '20px', textDecoration: 'none', zIndex: 1000, display: 'flex', alignItems: 'center' },
-  contentWrapper: { width: '100%', maxWidth: '450px', textAlign: 'center' },
+  contentWrapper: { width: '100%', maxWidth: '560px', textAlign: 'center' },
   header: { marginBottom: '25px' },
   title: { fontSize: '2.2rem', margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' },
   subtitle: { margin: '0', color: '#94a3b8', fontSize: '0.95rem' },
-  grid: { width: '100%' },
-  card: { backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '16px', padding: '25px', textAlign: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.4)' },
-  cardIcon: { fontSize: '3rem', marginBottom: '10px' },
-  cardTitle: { margin: '0 0 10px 0', fontSize: '1.4rem', fontWeight: 'bold' },
-  cardDesc: { color: '#94a3b8', fontSize: '0.85rem', marginBottom: '20px', lineHeight: '1.5' },
-  cardBtn: { backgroundColor: '#38bdf8', color: '#0f172a', border: 'none', padding: '12px 20px', borderRadius: '8px', fontSize: '0.95rem', fontWeight: 'bold', cursor: 'pointer', width: '100%' }
+  grid: { display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', width: '100%' },
+  card: { backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '16px', padding: '22px 18px', textAlign: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', display: 'flex', flexDirection: 'column', alignItems: 'center' },
+  cardIcon: { fontSize: '2.6rem', marginBottom: '10px' },
+  cardTitle: { margin: '0 0 8px 0', fontSize: '1.15rem', fontWeight: 'bold' },
+  cardDesc: { color: '#94a3b8', fontSize: '0.8rem', marginBottom: '18px', lineHeight: '1.5', flexGrow: 1 },
+  cardBtn: { color: '#0f172a', border: 'none', padding: '10px 16px', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 'bold', cursor: 'pointer', width: '100%' }
+};
+
+const iStyles = {
+  wrapper: { display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', maxWidth: '520px', height: 'calc(100vh - 40px)', boxSizing: 'border-box' },
+  frame: { flex: 1, border: 'none', borderRadius: '14px', width: '100%', overflow: 'auto' },
 };
 
 const tStyles = {

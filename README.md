@@ -1,6 +1,6 @@
 # 🎮 Retro Arcade Portal
 
-Un portale di giochi retro responsivo e moderno sviluppato interamente in **React nativo** (senza file HTML esterni o dipendenze pesanti). Il progetto include due grandi classici riadattati per essere giocati fluidamente sia da computer (tramite tastiera) sia da dispositivi mobili (tramite una pulsantiera touch dedicata).
+Un portale di giochi retro responsivo e moderno sviluppato in **React nativo**. Il progetto include quattro grandi classici: due implementati come componenti React (con supporto tastiera e touch) e due come pagine HTML standalone visualizzate in un iframe integrato.
 
 🚀 **Link al gioco online:** [https://massimilianopetra.github.io/retro-arcade/](https://massimilianopetra.github.io/retro-arcade/)
 
@@ -20,6 +20,20 @@ Il leggendario rompicapo geometrico sovietico, ottimizzato con una griglia fluid
 - **Controlli da PC:** Freccia Sinistra/Destra (`A`/`D`) per muoversi, Freccia Su (`W`) per ruotare, Freccia Giù (`S`) per accelerare la caduta e **Barra Spaziatrice** per l'Hard Drop (caduta istantanea).
 - **Controlli Mobile:** Pulsantiera touch posizionata sotto il tabellone per giocare comodamente da smartphone.
 - **Anti-Scroll:** Blocco automatico dei tasti direzionali (`preventDefault`) per evitare il tremolio della pagina web durante le sessioni di gioco più frenetiche.
+
+### 3. 💡 Lights Out — Edizione Retro
+Puzzle logico basato sul gioco elettronico degli anni '90 di Tiger Electronics.
+- **Obiettivo:** Spegnere tutte e 25 le luci di una griglia 5×5 nel minor numero di mosse possibile.
+- **Meccanica a croce:** Ogni click inverte la cella selezionata e le 4 celle adiacenti (sopra, sotto, sinistra, destra).
+- **Livelli sempre risolvibili:** La configurazione iniziale viene generata applicando mosse casuali a ritroso, garantendo che esista sempre una soluzione.
+- **Funzione Annulla (Undo):** Possibilità di tornare indietro di una mossa alla volta per correggere gli errori.
+
+### 4. 🎲 Yahtzee Arcade
+La versione digitale del classico gioco di dadi da tavolo, con supporto fino a 4 giocatori.
+- **Fino a 4 giocatori:** Turni alternati con tabellone punteggi dedicato al giocatore di turno e classifica generale sempre visibile.
+- **Meccanica originale:** 3 lanci per turno, possibilità di tenere (hold) i dadi tra un lancio e l'altro cliccandoci sopra.
+- **Tabellone completo:** Tutte le 13 categorie ufficiali (Assi, Due, ... Sei, Tris, Poker, Full, Scale, Yahtzee, Chance) con calcolo automatico del bonus sezione superiore (+35 punti se si raggiungono 63 punti nei numeri).
+- **Yahtzee multiplo:** Gestione della regola ufficiale del bonus +100 punti per ogni Yahtzee successivo al primo.
 
 ---
 
