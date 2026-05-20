@@ -195,11 +195,13 @@ function TetrisGame({ onBack }) {
     });
   };
 
+  const randomShape = () => SHAPES[Math.floor(Math.random() * 7) + 1].map(row => [...row]);
+
   const playerReset = () => {
     const state = stateRef.current;
-    if (!state.player.nextMatrix) state.player.nextMatrix = SHAPES[Math.floor(Math.random() * 7) + 1];
+    if (!state.player.nextMatrix) state.player.nextMatrix = randomShape();
     state.player.matrix = state.player.nextMatrix;
-    state.player.nextMatrix = SHAPES[Math.floor(Math.random() * 7) + 1];
+    state.player.nextMatrix = randomShape();
     state.player.pos.y = 0;
     state.player.pos.x = Math.floor(state.arena[0].length / 2) - Math.floor(state.player.matrix[0].length / 2);
 
@@ -487,10 +489,10 @@ export default function App() {
       {schermata === 'mastermind' && <MastermindGame onBack={() => setSchermata('home')} />}
       {schermata === 'tetris'     && <TetrisGame     onBack={() => setSchermata('home')} />}
       {schermata === 'lightsout'  && (
-        <IframeGame onBack={() => setSchermata('home')} src="/giochi/lightsout.html" title="Lights Out" icon="💡" />
+        <IframeGame onBack={() => setSchermata('home')} src={`${import.meta.env.BASE_URL}giochi/lightsout.html`} title="Lights Out" icon="💡" />
       )}
       {schermata === 'yahtzee'    && (
-        <IframeGame onBack={() => setSchermata('home')} src="/giochi/yatzee.html"    title="Yahtzee"    icon="🎲" />
+        <IframeGame onBack={() => setSchermata('home')} src={`${import.meta.env.BASE_URL}giochi/yatzee.html`}    title="Yahtzee"    icon="🎲" />
       )}
     </div>
   );
