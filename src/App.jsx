@@ -257,27 +257,29 @@ function TetrisGame({ onBack }) {
     draw();
   };
 
-  const rotateMatrix = (matrix, dir) => {
-    for (let y = 0; y < matrix.length; ++y) {
-      for (let x = 0; x < y; ++x) {
-        [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
-      }
-    }
-    if (dir > 0) matrix.forEach(row => row.reverse());
-    else matrix.reverse();
+  const rotateMatrix = (matrix) => {
+    const rows = matrix.length;
+    const cols = matrix[0].length;
+    // rotazione 90° oraria corretta per matrici non quadrate
+    return Array.from({ length: cols }, (_, x) =>
+      Array.from({ length: rows }, (_, y) => matrix[rows - 1 - y][x])
+    );
   };
 
   const playerRotate = () => {
     const state = stateRef.current;
-    const pos = state.player.pos.x;
+    const originalMatrix = state.player.matrix;
+    const originalPos = state.player.pos.x;
+    const rotated = rotateMatrix(originalMatrix);
+
+    state.player.matrix = rotated;
     let offset = 1;
-    rotateMatrix(state.player.matrix, 1);
     while (collide(state.arena, state.player)) {
       state.player.pos.x += offset;
       offset = -(offset + (offset > 0 ? 1 : -1));
-      if (offset > state.player.matrix.length) {
-        rotateMatrix(state.player.matrix, -1);
-        state.player.pos.x = pos;
+      if (Math.abs(offset) > rotated[0].length) {
+        state.player.matrix = originalMatrix;
+        state.player.pos.x = originalPos;
         return;
       }
     }
