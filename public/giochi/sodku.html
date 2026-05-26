@@ -167,7 +167,13 @@
         function updateKeypad() {
             for (let n = 1; n <= 9; n++) {
                 const btn = document.querySelector(`.key[data-num="${n}"]`);
-                if (btn) btn.disabled = numberCounts[n] >= 9;
+                if (btn) {
+                    let count = 0;
+                    for (let r = 0; r < 9; r++)
+                        for (let c = 0; c < 9; c++)
+                            if (board[r][c] === n) count++;
+                    btn.disabled = count >= 9;
+                }
             }
         }
 
