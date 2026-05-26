@@ -27,7 +27,8 @@
         .cell:nth-child(3n) { border-right: 2px solid #000; }
         .cell:nth-child(9n) { border-right: none; }
         .r-2, .r-5 { border-bottom: 2px solid #000; }
-        .cell.fixed { color: var(--fixed); background: #1c1d26; }
+        .cell.fixed { color: var(--fixed); background: #1a2236; cursor: default; }
+        .key:disabled { opacity: 0.3; cursor: not-allowed; }
         .cell.selected { background: #44475a!important; outline: 2px solid var(--fixed); outline-offset: -2px; }
         .cell.error { background: var(--error)!important; color: #fff!important; }
         .keypad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 10px; }
@@ -56,15 +57,15 @@
         <div class="grid" id="grid"></div>
 
         <div class="keypad">
-            <button class="key" onclick="inputNumber(1)">1</button>
-            <button class="key" onclick="inputNumber(2)">2</button>
-            <button class="key" onclick="inputNumber(3)">3</button>
-            <button class="key" onclick="inputNumber(4)">4</button>
-            <button class="key" onclick="inputNumber(5)">5</button>
-            <button class="key" onclick="inputNumber(6)">6</button>
-            <button class="key" onclick="inputNumber(7)">7</button>
-            <button class="key" onclick="inputNumber(8)">8</button>
-            <button class="key" onclick="inputNumber(9)">9</button>
+            <button class="key" data-num="1" onclick="inputNumber(1)">1</button>
+            <button class="key" data-num="2" onclick="inputNumber(2)">2</button>
+            <button class="key" data-num="3" onclick="inputNumber(3)">3</button>
+            <button class="key" data-num="4" onclick="inputNumber(4)">4</button>
+            <button class="key" data-num="5" onclick="inputNumber(5)">5</button>
+            <button class="key" data-num="6" onclick="inputNumber(6)">6</button>
+            <button class="key" data-num="7" onclick="inputNumber(7)">7</button>
+            <button class="key" data-num="8" onclick="inputNumber(8)">8</button>
+            <button class="key" data-num="9" onclick="inputNumber(9)">9</button>
             <button class="key action" onclick="inputNumber(0)">❌</button>
         </div>
 
@@ -72,16 +73,18 @@
     </div>
 
     <script>
-        let solution = [], board = [], selectedCell = null, gameOver = false;
+        let solution = [], board = [], fixedMask = [], selectedCell = null, gameOver = false, numberCounts = {};
 
         function initGame() {
             const gridDisplay = document.getElementById('grid');
             gridDisplay.innerHTML = ''; selectedCell = null; gameOver = false;
             document.getElementById('status').innerText = "🧠 In corso";
+            numberCounts = {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0};
 
             solution = Array.from({ length: 9 }, () => Array(9).fill(0));
             fillSudoku(solution);
             board = solution.map(row => row.slice());
+            fixedMask = Array.from({ length: 9 }, () => Array(9).fill(false));
 
             const diff = document.getElementById('difficulty').value;
             let cellsToRemove = diff === 'easy' ? 30 : diff === 'medium' ? 45 : 55;
@@ -98,12 +101,15 @@
                     cellEl.dataset.row = r; cellEl.dataset.col = c;
                     if (board[r][c] !== 0) {
                         cellEl.innerText = board[r][c]; cellEl.classList.add('fixed');
+                        fixedMask[r][c] = true;
+                        numberCounts[board[r][c]]++;
                     } else {
                         cellEl.addEventListener('click', () => selectCell(cellEl));
                     }
                     gridDisplay.appendChild(cellEl);
                 }
             }
+            updateKeypad();
             checkErrors();
         }
 
@@ -148,9 +154,21 @@
         function inputNumber(num) {
             if (!selectedCell || gameOver) return;
             const r = parseInt(selectedCell.dataset.row), c = parseInt(selectedCell.dataset.col);
+            if (fixedMask[r][c]) return;
+            const prev = board[r][c];
+            if (prev !== 0) numberCounts[prev]--;
             board[r][c] = num;
             selectedCell.innerText = num === 0 ? '' : num;
+            if (num !== 0) numberCounts[num]++;
+            updateKeypad();
             checkErrors(); checkWin();
+        }
+
+        function updateKeypad() {
+            for (let n = 1; n <= 9; n++) {
+                const btn = document.querySelector(`.key[data-num="${n}"]`);
+                if (btn) btn.disabled = numberCounts[n] >= 9;
+            }
         }
 
         function checkErrors() {

@@ -97,6 +97,23 @@ function MastermindGame({ onBack }) {
         <button style={tStyles.playBtn} onClick={initGame}>Nuovo</button>
       </div>
 
+      <div style={mStyles.attemptsBar}>
+        <span style={mStyles.attemptsLabel}>TENTATIVI</span>
+        <div style={mStyles.attemptsPips}>
+          {Array(MAX_ATTEMPTS).fill().map((_, i) => (
+            <div key={i} style={{
+              ...mStyles.pip,
+              backgroundColor: i < attemptsHistory.length
+                ? (i < 4 ? '#50fa7b' : i < 7 ? '#f1c40f' : '#ff5555')
+                : '#1e293b'
+            }} />
+          ))}
+        </div>
+        <span style={{ ...mStyles.attemptsCount, color: attemptsHistory.length >= 8 ? '#ff5555' : attemptsHistory.length >= 5 ? '#f1c40f' : '#50fa7b' }}>
+          {attemptsHistory.length}/{MAX_ATTEMPTS}
+        </span>
+      </div>
+
       <div style={mStyles.container}>
         <div style={mStyles.secretRow}>
           {secretCode.map((colorIdx, i) => (
@@ -113,8 +130,10 @@ function MastermindGame({ onBack }) {
                 {att.guess.map((cIdx, j) => <div key={j} style={{...mStyles.peg, backgroundColor: COLOR_PALETTE[cIdx]}} />)}
               </div>
               <div style={mStyles.hints}>
-                {Array(att.blacks).fill().map((_, j) => <div key={`b-${j}`} style={{...mStyles.hintDot, backgroundColor: '#000'}} />)}
-                {Array(att.whites).fill().map((_, j) => <div key={`w-${j}`} style={{...mStyles.hintDot, backgroundColor: '#fff'}} />)}
+                {Array(4).fill().map((_, j) => {
+                  const color = j < att.blacks ? '#000' : j < att.blacks + att.whites ? '#fff' : '#6b7280';
+                  return <div key={j} style={{...mStyles.hintDot, backgroundColor: color}} />;
+                })}
               </div>
             </div>
           ))}
@@ -551,11 +570,16 @@ const mStyles = {
   row: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#111217', padding: '6px 12px', borderRadius: '8px' },
   slots: { display: 'flex', gap: '10px' },
   peg: { width: '30px', height: '30px', borderRadius: '50%', border: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#fff', cursor: 'pointer' },
-  hints: { display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '4px', background: '#222', padding: '4px', borderRadius: '4px' },
-  hintDot: { width: '8px', height: '8px', borderRadius: '50%', border: '1px solid #444' },
+  hints: { display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '4px', background: '#6b7280', padding: '4px', borderRadius: '4px' },
+  hintDot: { width: '8px', height: '8px', borderRadius: '50%', border: '1px solid #9ca3af' },
   controls: { display: 'flex', flexDirection: 'column', gap: '10px', background: '#0f172a', padding: '10px', borderRadius: '10px' },
   picker: { display: 'flex', justifyContent: 'space-between', padding: '5px 0' },
   pickerPeg: { width: '34px', height: '34px', borderRadius: '50%', border: '1px solid #000', cursor: 'pointer' },
   submitBtn: { backgroundColor: '#50fa7b', color: '#0f172a', border: 'none', padding: '6px 12px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' },
-  status: { textAlign: 'center', fontWeight: 'bold', fontSize: '1rem', marginTop: '5px' }
+  status: { textAlign: 'center', fontWeight: 'bold', fontSize: '1rem', marginTop: '5px' },
+  attemptsBar: { display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#1e293b', padding: '8px 12px', borderRadius: '8px', border: '1px solid #334155' },
+  attemptsLabel: { fontSize: '0.65rem', color: '#64748b', fontWeight: 'bold', letterSpacing: '1px', whiteSpace: 'nowrap' },
+  attemptsPips: { display: 'flex', gap: '4px', flex: 1 },
+  pip: { flex: 1, height: '8px', borderRadius: '3px', border: '1px solid #334155', transition: 'background-color 0.3s' },
+  attemptsCount: { fontSize: '0.85rem', fontWeight: 'bold', minWidth: '30px', textAlign: 'right' }
 };
