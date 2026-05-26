@@ -1,6 +1,6 @@
 # 🎮 Retro Arcade Portal
 
-Un portale di giochi retro responsivo e moderno sviluppato in **React nativo**. Il progetto include quattro grandi classici: due implementati come componenti React (con supporto tastiera e touch) e due come pagine HTML standalone visualizzate in un iframe integrato.
+Un portale di giochi retro responsivo e moderno sviluppato in **React nativo**. Il progetto include sei grandi classici: due implementati come componenti React (con supporto tastiera e touch) e quattro come pagine HTML standalone visualizzate in un iframe integrato.
 
 🚀 **Link al gioco online:** [https://massimilianopetra.github.io/retro-arcade/](https://massimilianopetra.github.io/retro-arcade/)
 
@@ -34,6 +34,18 @@ La versione digitale del classico gioco di dadi da tavolo, con supporto fino a 4
 - **Meccanica originale:** 3 lanci per turno, possibilità di tenere (hold) i dadi tra un lancio e l'altro cliccandoci sopra.
 - **Tabellone completo:** Tutte le 13 categorie ufficiali (Assi, Due, ... Sei, Tris, Poker, Full, Scale, Yahtzee, Chance) con calcolo automatico del bonus sezione superiore (+35 punti se si raggiungono 63 punti nei numeri).
 - **Yahtzee multiplo:** Gestione della regola ufficiale del bonus +100 punti per ogni Yahtzee successivo al primo.
+
+### 5. 💣 Minesweeper
+Il classico gioco di logica dove bisogna mappare un campo minato senza far esplodere nessuna mina.
+- **Obiettivo:** Scoprire tutte le celle sicure della griglia senza cliccare sulle mine nascoste.
+- **Numeri indicatori:** Ogni cella aperta mostra quante mine sono presenti nelle celle adiacenti.
+- **Bandierine:** Possibilità di contrassegnare con una bandierina le celle sospette per tenere traccia delle mine individuate.
+
+### 6. 🔢 Sudoku
+Il celebre puzzle numerico giapponese che mette alla prova la logica e la concentrazione.
+- **Griglia 9×9:** Suddivisa in nove blocchi 3×3, ogni riga, colonna e blocco deve contenere tutti i numeri da 1 a 9 senza ripetizioni.
+- **Celle fisse e modificabili:** Le celle pre-compilate formano lo schema iniziale; quelle vuote sono da completare dal giocatore.
+- **Verifica soluzione:** Controllo automatico della correttezza della griglia al completamento.
 
 ---
 

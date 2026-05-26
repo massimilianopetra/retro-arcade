@@ -441,10 +441,12 @@ function IframeGame({ onBack, src, title, icon }) {
 // 📱 COMPONENTE PRINCIPALE (PORTALE)
 // ==========================================
 const GAMES = [
-  { id: 'mastermind', icon: '🔴', title: 'Mastermind',    desc: 'Indovina il codice segreto di 4 colori. Valgono le ripetizioni!',           color: '#e74c3c' },
-  { id: 'tetris',     icon: '🧱', title: 'Tetris Arcade', desc: 'Incastra i mattoncini geometrici e distruggi le linee a tutto schermo.',    color: '#3498db' },
-  { id: 'lightsout',  icon: '💡', title: 'Lights Out',    desc: 'Spegni tutte le luci: ogni click cambia la cella e i 4 vicini.',             color: '#f1c40f' },
-  { id: 'yahtzee',    icon: '🎲', title: 'Yahtzee',       desc: 'Lancia 5 dadi fino a 3 volte per comporre le migliori combinazioni!',        color: '#9b59b6' },
+  { id: 'mastermind',  icon: '🔴', title: 'Mastermind',    desc: 'Indovina il codice segreto di 4 colori. Valgono le ripetizioni!',           color: '#e74c3c' },
+  { id: 'tetris',      icon: '🧱', title: 'Tetris Arcade', desc: 'Incastra i mattoncini geometrici e distruggi le linee a tutto schermo.',    color: '#3498db' },
+  { id: 'lightsout',   icon: '💡', title: 'Lights Out',    desc: 'Spegni tutte le luci: ogni click cambia la cella e i 4 vicini.',             color: '#f1c40f' },
+  { id: 'yahtzee',     icon: '🎲', title: 'Yahtzee',       desc: 'Lancia 5 dadi fino a 3 volte per comporre le migliori combinazioni!',        color: '#9b59b6' },
+  { id: 'minesweeper', icon: '💣', title: 'Minesweeper',   desc: 'Scopri tutte le celle senza far esplodere le mine nascoste!',               color: '#6b7280' },
+  { id: 'sudoku',      icon: '🔢', title: 'Sudoku',        desc: 'Riempi la griglia 9×9 con i numeri da 1 a 9 senza ripetizioni.',            color: '#0ea5e9' },
 ];
 
 export default function App() {
@@ -493,8 +495,14 @@ export default function App() {
       {schermata === 'lightsout'  && (
         <IframeGame onBack={() => setSchermata('home')} src={`${import.meta.env.BASE_URL}giochi/lightsout.html`} title="Lights Out" icon="💡" />
       )}
-      {schermata === 'yahtzee'    && (
-        <IframeGame onBack={() => setSchermata('home')} src={`${import.meta.env.BASE_URL}giochi/yatzee.html`}    title="Yahtzee"    icon="🎲" />
+      {schermata === 'yahtzee'     && (
+        <IframeGame onBack={() => setSchermata('home')} src={`${import.meta.env.BASE_URL}giochi/yatzee.html`}       title="Yahtzee"    icon="🎲" />
+      )}
+      {schermata === 'minesweeper' && (
+        <IframeGame onBack={() => setSchermata('home')} src={`${import.meta.env.BASE_URL}giochi/mInesweeper.html`}  title="Minesweeper" icon="💣" />
+      )}
+      {schermata === 'sudoku'      && (
+        <IframeGame onBack={() => setSchermata('home')} src={`${import.meta.env.BASE_URL}giochi/sodku.html`}        title="Sudoku"      icon="🔢" />
       )}
     </div>
   );
